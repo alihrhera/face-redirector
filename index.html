@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Redirecting to Generated Image</title>
+  <script>
+    async function redirectToImage() {
+      const proxyUrl = "https://corsproxy.io/?";
+      const targetUrl = "https://this-person-does-not-exist.com/new?gender=male&age=26-35&etnic=all";
+
+      try {
+        const response = await fetch(proxyUrl + encodeURIComponent(targetUrl));
+        const data = await response.json();
+
+        if (data.generated === "true" && data.src) {
+          const imageUrl = `https://this-person-does-not-exist.com${data.src}`;
+          window.location.href = imageUrl;
+        } else {
+          document.body.innerHTML = "<h2>Image not generated. Try again later.</h2>";
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        document.body.innerHTML = "<h2>Failed to fetch image. Please try again.</h2>";
+      }
+    }
+
+    window.onload = redirectToImage;
+  </script>
+</head>
+<body>
+  <p>🔄 Please wait... Generating image and redirecting.</p>
+</body>
+</html>
